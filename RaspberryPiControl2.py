@@ -9,7 +9,7 @@
 
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QImage, QPixmap
 import socket
 import cv2
 import pickle
@@ -118,17 +118,20 @@ class Ui_MainWindow(object):
             msg_size = struct.unpack(">L", packed_msg_size)[0]
             print("msg_size: {}".format(msg_size))
 
-            # while len(data) < msg_size:
-            #     data += serversocket.recv(4096)
+            while len(data) < msg_size:
+                data += serversocket.recv(4096)
             frame_data = data[:msg_size]
             data = data[msg_size:]
 
             frame = pickle.loads(frame_data, fix_imports=True, encoding="bytes")
             frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-            name = "frame.png"
-            cv2.imwrite(name, frame)
-            image = QPixmap("./"+name)
-            self.MyImage.setPixmap(image)
+            height, width, channel = frame.shape
+            bytesPerLine = 3 * width
+            qImg = QImage(frame.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+            # name = "frame.png"
+            # cv2.imwrite(name, frame)
+            # image = QPixmap("./"+name)
+            self.MyImage.setPixmap(QPixmap(qImg))
             # cv2.imshow('ImageWindow', frame)
             cv2.waitKey(1)
             # msg = serversocket.recv(1024)
