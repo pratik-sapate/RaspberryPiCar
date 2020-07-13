@@ -18,8 +18,8 @@ print("Got a connection from %s" % str(addr))
 
 obj = objectDetect()
 cam = cv2.VideoCapture(0)
-cam.set(3, 640);
-cam.set(4, 480);
+cam.set(3, 640)
+cam.set(4, 480)
 img_counter = 0
 
 while True:
