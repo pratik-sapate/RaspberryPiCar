@@ -20,8 +20,9 @@ import threading
 class Ui_MainWindow(object):
     def __init__(self):
         print('Main ui initialized')
-        # self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # self.socket_client.connect(('127.0.0.1', 8081))
+        self.URL = 'http://127.0.0.1:'
+        # self.URL = 'http://192.168.43.159:'
+        self.port = str(9091)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -79,19 +80,19 @@ class Ui_MainWindow(object):
         self.ShowImage.setText(_translate("MainWindow", "Show Image"))
 
     def onClick_Forword(self):
-        data = requests.get(url='http://192.168.43.159:9090/forword')
+        data = requests.get(url=self.URL+self.port+'/forword')
         print(data)
 
     def onClick_Reverse(self):
-        data = requests.get(url='http://192.168.43.159:9090/reverse')
+        data = requests.get(url=self.URL+self.port+'/reverse')
         print(data)
 
     def onClick_Clockwise(self):
-        data = requests.get(url='http://192.168.43.159:9090/clockwise')
+        data = requests.get(url=self.URL+self.port+'/clockwise')
         print(data)
 
     def onClick_Anticlockwise(self):
-        data = requests.get(url='http://192.168.43.159:9090/anticlockwise')
+        data = requests.get(url=self.URL+self.port+'/anticlockwise')
         print(data)
 
     def onClick_ShowImage(self):
@@ -106,17 +107,13 @@ class Ui_MainWindow(object):
         serversocket.connect((host, port))
         data = b""
         payload_size = struct.calcsize(">L")
-        # print('payload_size: ', payload_size)
         while True:
             while len(data) < payload_size:
-                print("Recv: {}".format(len(data)))
                 data += serversocket.recv(4096)
 
-            # print("Done Recv: {}".format(len(data)))
             packed_msg_size = data[:payload_size]
             data = data[payload_size:]
             msg_size = struct.unpack(">L", packed_msg_size)[0]
-            print("msg_size: {}".format(msg_size))
 
             while len(data) < msg_size:
                 data += serversocket.recv(4096)
@@ -134,8 +131,6 @@ class Ui_MainWindow(object):
             self.MyImage.setPixmap(QPixmap(qImg))
             # cv2.imshow('ImageWindow', frame)
             cv2.waitKey(1)
-            # msg = serversocket.recv(1024)
-            # print(msg.decode('ascii'))
 
 
 if __name__ == "__main__":
