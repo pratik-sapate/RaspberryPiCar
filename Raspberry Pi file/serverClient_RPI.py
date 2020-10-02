@@ -1,11 +1,5 @@
 from flask import Flask
 # import RPi.GPIO as GPIO
-import socket
-import cv2
-import pickle
-import struct
-from multiprocessing import Pool
-from threading import Thread
 # multiprocessing is repeating a process so we are using semaphore Lock
 import os
 
@@ -37,11 +31,6 @@ def Forword():
     # GPIO.output(left_negitive, GPIO.LOW)
     # GPIO.output(right_positive, GPIO.HIGH)
     # GPIO.output(right_negitive, GPIO.LOW)
-    # time.sleep(2)
-    # GPIO.output(left_positive, GPIO.LOW)
-    # GPIO.output(left_negitive, GPIO.LOW)
-    # GPIO.output(right_positive, GPIO.LOW)
-    # GPIO.output(right_negitive, GPIO.LOW)
     return "Forword"
 
 @app.route('/reverse')
@@ -50,11 +39,6 @@ def Reverse():
     # GPIO.output(left_negitive, GPIO.HIGH)
     # GPIO.output(right_positive, GPIO.LOW)
     # GPIO.output(right_negitive, GPIO.HIGH)
-    # time.sleep(2)
-    # GPIO.output(left_positive, GPIO.LOW)
-    # GPIO.output(left_negitive, GPIO.LOW)
-    # GPIO.output(right_positive, GPIO.LOW)
-    # GPIO.output(right_negitive, GPIO.LOW)
     return "Reverse"
 
 @app.route('/clockwise')
@@ -63,11 +47,6 @@ def Clockwise():
     # GPIO.output(left_negitive, GPIO.LOW)
     # GPIO.output(right_positive, GPIO.LOW)
     # GPIO.output(right_negitive, GPIO.HIGH)
-    # time.sleep(2)
-    # GPIO.output(left_positive, GPIO.LOW)
-    # GPIO.output(left_negitive, GPIO.LOW)
-    # GPIO.output(right_positive, GPIO.LOW)
-    # GPIO.output(right_negitive, GPIO.LOW)
     return "Forword"
 
 @app.route('/anticlockwise')
@@ -76,12 +55,15 @@ def Anticlockwise():
     # GPIO.output(left_negitive, GPIO.HIGH)
     # GPIO.output(right_positive, GPIO.HIGH)
     # GPIO.output(right_negitive, GPIO.LOW)
-    # time.sleep(2)
+    return "Anticlockwise"
+
+@app.route('/stop')
+def stop():
     # GPIO.output(left_positive, GPIO.LOW)
     # GPIO.output(left_negitive, GPIO.LOW)
     # GPIO.output(right_positive, GPIO.LOW)
     # GPIO.output(right_negitive, GPIO.LOW)
-    return "Anticlockwise"
+    return "stop"
 
 def car_handle():
     app.run(debug=True, port=motor_port, host=pi_host)

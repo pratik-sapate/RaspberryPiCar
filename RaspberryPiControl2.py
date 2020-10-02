@@ -63,12 +63,17 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.Forword.clicked.connect(self.onClick_Forword)
-        self.Reverse.clicked.connect(self.onClick_Reverse)
-        self.Right.clicked.connect(self.onClick_Clockwise)
-        self.Left.clicked.connect(self.onClick_Anticlockwise)
-        self.ShowImage.clicked.connect(self.onClick_ShowImage)
-        self.onClick_ShowImage()
+        self.Forword.pressed.connect(self.on_click_forword)
+        self.Reverse.pressed.connect(self.on_click_reverse)
+        self.Right.pressed.connect(self.on_click_clockwise)
+        self.Left.pressed.connect(self.on_click_anticlockwise)
+        self.ShowImage.clicked.connect(self.on_click_showImage)
+
+        self.Forword.released.connect(self.on_click_stop)
+        self.Reverse.released.connect(self.on_click_stop)
+        self.Right.released.connect(self.on_click_stop)
+        self.Left.released.connect(self.on_click_stop)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -79,23 +84,27 @@ class Ui_MainWindow(object):
         self.Left.setText(_translate("MainWindow", "Left"))
         self.ShowImage.setText(_translate("MainWindow", "Show Image"))
 
-    def onClick_Forword(self):
+    def on_click_forword(self):
         data = requests.get(url=self.URL+self.port+'/forword')
         print(data)
 
-    def onClick_Reverse(self):
+    def on_click_reverse(self):
         data = requests.get(url=self.URL+self.port+'/reverse')
         print(data)
 
-    def onClick_Clockwise(self):
+    def on_click_clockwise(self):
         data = requests.get(url=self.URL+self.port+'/clockwise')
         print(data)
 
-    def onClick_Anticlockwise(self):
+    def on_click_anticlockwise(self):
         data = requests.get(url=self.URL+self.port+'/anticlockwise')
         print(data)
 
-    def onClick_ShowImage(self):
+    def on_click_stop(self):
+        data = requests.get(url=self.URL+self.port+'/stop')
+        print(data)
+
+    def on_click_showImage(self):
         print("hi")
         threading.Thread(target=self.controlCamera).start()
 
@@ -114,7 +123,6 @@ class Ui_MainWindow(object):
             packed_msg_size = data[:payload_size]
             data = data[payload_size:]
             msg_size = struct.unpack(">L", packed_msg_size)[0]
-
             while len(data) < msg_size:
                 data += serversocket.recv(4096)
             frame_data = data[:msg_size]
@@ -131,7 +139,6 @@ class Ui_MainWindow(object):
             self.MyImage.setPixmap(QPixmap(qImg))
             # cv2.imshow('ImageWindow', frame)
             cv2.waitKey(1)
-
 
 if __name__ == "__main__":
     import sys

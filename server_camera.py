@@ -13,7 +13,6 @@ class server(object):
     port_video = 9092
     # port_car_control = 9091
     # car_signal =
-    @staticmethod
     def videoCameraCamera(self):
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.serversocket.bind((self.host, self.port_video))
@@ -29,7 +28,7 @@ class server(object):
         img_counter = 0
         while True:
             ret, frame = cam.read()
-            frame = obj.detect_object_from_image(frame)
+            # frame = obj.detect_object_from_image(frame)
             result, frame = cv2.imencode('.jpg', frame, encode_param)
             data = pickle.dumps(frame, 0)
             # print(data)
